@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add new speed</title>
+<script>
+function sendData(){
+	//Create a new Javascript object
+	var speed=new Object();
+	speed.speed=document.getElementById("speed").value;
+	speed.desinval=document.getElementById("DesInVal").value;
+
+var jsonSpeed=JSON.stringify(speed);
+var xhttp = new XMLHttpRequest();
+
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+   document.getElementById("responseView").innerHTML = this.responseText;
+   var returned=JSON.parse(this.responseText);
+   document.getElementById("inparts").innerHTML="id="+returned.id+" speed="+returned.speed+" DesInVal="+returned.DesInVal;
+  }
+};
+
+xhttp.open("POST","./rest/hunterservice/addspeed?addcolumn=true",true);
+xhttp.setRequestHeader("Content-type","application/json");
+xhttp.send(jsonSpeed);
+
+}
+</script>
+
+</head>
+<h2>Fill in - speed parameters</h2>
+<form action="./rest/hunterservice/addspeed" method='post'>
+Speed: <input id='speed' type='text' name='speed' value='' placeholder='New speed'><br>
+Desired intensity value: <input id='DesInVal' type='text' name='DesInVal' value='' placeholder='New intensity value'><br>
+<input type='submit' name='ok' value='Send' onclick='sendData()'><br>
+</form>
+</body>
+</html>
