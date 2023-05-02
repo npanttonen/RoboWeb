@@ -64,6 +64,7 @@ public class Hunterservice {
 	@GET
 	@Path("/speed")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public int Speed() {
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("EV3");
