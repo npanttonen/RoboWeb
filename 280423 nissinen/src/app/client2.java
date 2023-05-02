@@ -50,6 +50,7 @@ public class client2 implements Runnable{
 		isv = 15;
 	}
 	DEobj.setIntensityValue(isv);
+	System.out.println(isv);
 	}
 }
 

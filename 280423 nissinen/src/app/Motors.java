@@ -48,7 +48,7 @@ public class Motors implements Runnable{
 
 					motorA.setSpeed(DEobj.getSpeed() - (int) correction);
 					motorB.setSpeed(DEobj.getSpeed() + (int) correction);
-					System.out.println(DEobj.getSpeed());
+					//System.out.println(DEobj.getSpeed());
 					//System.out.println(desiredIntensityValue);
 					motorA.forward();
 					motorB.forward();
