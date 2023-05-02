@@ -83,7 +83,7 @@ public class speedservice {
 	@Path("/addspeed")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Speed postSpeedByParams(@FormParam("speed") int speed, @FormParam("DesInVal") float DesInVal) {
+	public Speed postSpeedByParams(@FormParam("speed") int speed, @FormParam("DesInVal") int DesInVal) {
 	    EntityManagerFactory emf = Persistence.createEntityManagerFactory("speedapp");
 	    EntityManager em = emf.createEntityManager();
 	    em.getTransaction().begin();
