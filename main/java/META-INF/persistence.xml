@@ -3,16 +3,30 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	
-	<persistence-unit name="EV3">
-		<class>data.Speed</class>
+	<persistence-unit name="ev3">
+	<class>data.Speed</class>
 		
-		<properties>
-			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ev3" />
-			<property name="javax.persistence.jdbc.user" value="pena" />
-			<property name="javax.persistence.jdbc.password" value="" />
-			<property name="eclipselink.ddl-generation" value="create-tables" />
-		</properties>
+<!-- If using MySQL 5.7 -->
+<!--  
+	as a root user give a command
+	use performance_schema; 
+	GRANT SELECT ON performance_schema.session_variables TO pena@localhost;
+	
+	Change pena to the username you are using below in the property jdbc.user.
+	 -->		
+		
+<!--  jdbcDriver == class, where in the implementation of database functions--> 
+<!--  jdbcUrl == address to the database--> 
+<!--  jdbcUser == user name to the database--> 
+<!--  jdbcPassword == password of the database user--> 
+<!--  ddlGeneration == database tables will be created, if they do not exist--> 
+    <properties>
+	    <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+	    <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ev3" />
+	    <property name="javax.persistence.jdbc.user" value="pena" />
+	    <property name="javax.persistence.jdbc.password" value="" />
+	    <property name="eclipselink.ddl-generation" value="create-tables" />
+	</properties>
 	
 	</persistence-unit>
 </persistence>

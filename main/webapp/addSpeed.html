@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Robot Speed Control</title>
+       <style>
+        /* CSS for the website */
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+label {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+input[type="range"] {
+  width: 300px;
+  height: 8px;
+  -webkit-appearance: none;
+  background-color: #444;
+  outline: none;
+  margin-bottom: 30px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
+
+input[type="submit"] {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#speed-value,
+#turn-value,
+#DesInVal-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  
+}
+
+#responseView {
+  font-size: 20px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+#inparts {
+  font-size: 24px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Futuristic robot theme */
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+label {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+input[type="range"] {
+  width: 300px;
+  height: 8px;
+  -webkit-appearance: none;
+  background-color: #444;
+  outline: none;
+  margin-bottom: 30px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer
+}
+div{
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+    </style>
+
+
+<head>
+	<title>Robot Speed Control</title>
+</head>
+<body>
+    <h1>Robot Speed Control</h1> 
+    <div id="robot"></div>
+	
+    <form action='rest/services/addspeed' method='post'>
+        <div id="speed-value"><label for="speed">Speed:</label></div>
+        <input type="range" id="speed" name="speed" min="0" max="400" value="200">
+        
+        
+          <div id="turn-value"><label for="turn">Turn:</label></div>
+        <input type="range" id="turn" name="turn" min="140" max="200" value="170">
+      
+        
+        <div id="DesInVal-value"><label for="DesInVal">Desired Intensity Value:</label></div>
+        <input type="range" id="DesInVal" name="DesInVal" min="0" max="100" value="50">
+        
+        
+        <input type="submit" value="Send" onclick="sendData()">
+    </form>
+    <div id='inparts'></div>
+
+    <script>
+        // JavaScript code to display the value of the slider
+        const speedInput = document.getElementById("speed");
+        const speedValue = document.getElementById("speed-value");
+        const turnInput = document.getElementById("turn");
+        const turnValue = document.getElementById("turn-value");
+        const DesInValInput = document.getElementById("DesInVal");
+        const DesInValValue = document.getElementById("DesInVal-value");
+
+        speedInput.addEventListener("input", () => {
+            speedValue.textContent = `Speed: ${speedInput.value}`;
+        });
+
+        turnInput.addEventListener("input", () => {
+            turnValue.textContent = `Turn: ${turnInput.value}`;
+        });
+
+        DesInValInput.addEventListener("input", () => {
+            DesInValValue.textContent = `Desired Intensity Value: ${DesInValInput.value}`;
+        });
+
+        function sendData(){ // function to send data to EV3 database
+            var speed = new Object(); 
+            speed.speed=document.getElementById("speed").value;
+            speed.desinval=document.getElementById("DesInVal").value;
+            speed.turn=document.getElementById("turn").value;
+        
+            var jsonSpeed = JSON.stringify(speed);
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("responseView").innerHTML = this.responseText;
+                    var returned = JSON.parse(this.responseText);
+                    document.getElementById("inparts").innerHTML = "id=" + returned.id + " speed=" + returned.speed + " DesInVal=" + returned.DesInVal + " turn=" + returned.turn;
+                }
+            };
+
+            xhttp.open("GET", "./rest/services/addspeed", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(jsonSpeed);
+            
+           
+
+        }
+       
+      
+        function getTime() { // function to get time from database
+            var xhttp = new XMLHttpRequest();
+            
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var time = this.responseText;
+                    document.getElementById("Time").innerHTML = "time = " + time;
+                }
+            };
+            
+            xhttp.open("GET", "./rest/services/time", true);
+            xhttp.setRequestHeader("Content-type", "text/html");
+            xhttp.send();
+        }
+        
+        function getState() { // function to get state from database
+            var xhttp = new XMLHttpRequest();
+            
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var state = this.responseText;
+                    document.getElementById("State").innerHTML = "State = " + state + " seconds";
+                }
+            };
+            
+            xhttp.open("GET", "./rest/services/state", true);
+            xhttp.setRequestHeader("Content-type", "text/html");
+            xhttp.send();
+        }
+        setInterval(function() { // Updates time and state values every second
+            getTime();
+            getState();
+        }, 1000);
+        </script> 
+        <div id='Time'></div>
+        <div id='State'></div>
+</body>
+</html>
