@@ -1,75 +1,24 @@
-package services;
+package rest;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
+import javax.persistence.Entity;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import data.Speed;
 
-
-
-@Path("/services")
-public class test1 {
-	@GET
-	@Path("/test1")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String hello1() {
-		return "Hi, There";
-	}
-
-	//hae nopeus mysql-palvelimelta
-
-	@GET
-	@Path("/speed")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int Speed() {
-		
-
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("EV3");
-
-		EntityManager em = emf.createEntityManager();
-
-		// find the Speed object with id=1
-		Speed speed = em.find(Speed.class, 1);
-
-		int speedint = speed.getSpeed();
-		// close the EntityManager and EntityManagerFactory
-		em.close();
-		emf.close();
-					return speedint;
-		}
-
-	//hae desinval
-	@GET
-	@Path("/desinval")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int DesInVal() {
-		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("speedapp");
-		EntityManager em = emf.createEntityManager();
-
-		// find the desinval object with id=1
-		data.Speed d = em.find(Speed.class, 1);
-
-		int desifloat = (int) d.getDesInVal();
-		// close the EntityManager and EntityManagerFactory
-		em.close();
-		emf.close();
-					return desifloat;
-		}
-	//jotain
+@Path("/hunterservice")
+public class Hunterservice {
+//Reading all the rows from table Speed.
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -85,36 +34,12 @@ public class test1 {
 		return list;
 	}
 	
-	@GET
-	@Path("/jotain/{par1}")
-	@Produces(MediaType.TEXT_PLAIN)
-	public int postSpeedByParams1(@PathParam("par1") int p1) {
-		 EntityManagerFactory emf = Persistence.createEntityManagerFactory("EV3");
-		    EntityManager em = emf.createEntityManager();
-		    em.getTransaction().begin();
-		    
-		    // get the existing Speed object with id 1, or create a new one if it doesn't exist
-		    Speed op1Obj = em.find(Speed.class, 1);
-		    if (op1Obj == null) {
-		    	op1Obj = new Speed();
-		    	op1Obj.setId(1);
-		    }
-		    
-		    // update the values of the Speed object with the new values
-		    op1Obj.setOp1(p1);
-		    
-		    // persist the updated Speed object
-		    em.persist(op1Obj);
-		    em.getTransaction().commit();
-		    return p1;
-	}
-	
-//lähetä nopeus mysql-palvelimelle	
+//This method uses FormParams, but does the same as previous	
 	@POST
 	@Path("/addspeed")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Speed postSpeedByParams(@FormParam("speed") int speed, @FormParam("DesInVal") int DesInVal) {
+	public void postSpeedByParams(@FormParam("speed") int speed, @FormParam("DesInVal") float DesInVal, @FormParam("turn") int turn) {
 	    EntityManagerFactory emf = Persistence.createEntityManagerFactory("EV3");
 	    EntityManager em = emf.createEntityManager();
 	    em.getTransaction().begin();
@@ -129,12 +54,29 @@ public class test1 {
 	    // update the values of the Speed object with the new values
 	    speedObj.setSpeed(speed);
 	    speedObj.setDesInVal(DesInVal);
+	    speedObj.setTurn(turn);
 	    
 	    // persist the updated Speed object
 	    em.persist(speedObj);
 	    em.getTransaction().commit();
-	    return speedObj;
+	    //return speedObj;
 	}
-	
+	@GET
+	@Path("/speed")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public int Speed() {
+		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("EV3");
+		EntityManager em = emf.createEntityManager();
 
+		// find the Speed object with id=1
+		Speed speed = em.find(Speed.class, 1);
+
+		int speedint = speed.getSpeed();
+		// close the EntityManager and EntityManagerFactory
+		em.close();
+		emf.close();
+					return speedint;
+		}
 }
