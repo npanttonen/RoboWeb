@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Robot Speed Control</title>
+       <style>
+        /* CSS for the robot image */
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+label {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+input[type="range"] {
+  width: 300px;
+  height: 8px;
+  -webkit-appearance: none;
+  background-color: #444;
+  outline: none;
+  margin-bottom: 30px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#robot {
+  display: block;
+  margin: 0 auto;
+  width: 300px;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 50px;
+}
+
+input[type="submit"] {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#speed-value,
+#turn-value,
+#DesInVal-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#responseView {
+  font-size: 20px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+#inparts {
+  font-size: 24px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Futuristic robot theme */
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+label {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+input[type="range"] {
+  width: 300px;
+  height: 8px;
+  -webkit-appearance: none;
+  background-color: #444;
+  outline: none;
+  margin-bottom: 30px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer
+    </style>
+
+
+
+
+
+
+
+
+
+
+    
+</head>
+
+    <script>
+        // JavaScript code to display the value of the slider
+        const speedInput = document.getElementById("speed");
+        const speedValue = document.getElementById("speed-value");
+        const turnInput = document.getElementById("turn");
+        const turnValue = document.getElementById("turn-value");
+        const DesInValInput = document.getElementById("DesInVal");
+        const DesInValValue = document.getElementById("DesInVal-value");
+
+        speedInput.addEventListener("input", () => {
+            speedValue.textContent = `Speed: ${speedInput.value}`;
+        });
+
+        turnInput.addEventListener("input", () => {
+            turnValue.textContent = `Turn: ${turnInput.value}`;
+        });
+
+        DesInValInput.addEventListener("input", () => {
+            DesInValValue.textContent = `Desired Intensity Value: ${DesInValInput.value}`;
+        });
+   
+    function sendData(){
+        var speed = new Object(); 
+            speed.speed=document.getElementById("speed").value;
+            speed.desinval=document.getElementById("DesInVal").value;
+            speed.turn=document.getElementById("turn").value;
+        
+        var jsonSpeed = JSON.stringify(speed);
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("responseView").innerHTML = this.responseText;
+                var returned = JSON.parse(this.responseText);
+                document.getElementById("inparts").innerHTML = "id=" + returned.id + " speed=" + returned.speed + " DesInVal=" + returned.DesInVal + " turn=" + returned.turn;
+            }
+        };
+
+        xhttp.open("POST", "./rest/hunterservice/addspeed", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(jsonSpeed);
+    }
+    </script>
+<body>
+    <h1>Robot Speed Control</h1>
+    <div id="robot"></div>
+
+    <form action='rest/hunterservice/addspeed' method='post'>
+        <label for="speed">Speed:</label>
+        <input type="range" id="speed" name="speed" min="0" max="400" value="200">
+        <div id="speed-value"></div>
+        
+        <label for="turn">Turn:</label>
+        <input type="range" id="turn" name="turn" min="140" max="200" value="170">
+        <div id="turn-value"></div>
+        
+        <label for="DesInVal">Desired Intensity Value:</label>
+        <input type="range" id="DesInVal" name="DesInVal" min="0" max="8" value="4">
+        <div id="DesInVal-value"></div>
+        
+        <input type="submit" value="Send" onclick="sendData()">
+    </form>
+    <div id='inparts'></div>
+
+</body>
+</html>

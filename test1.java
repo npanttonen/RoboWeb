@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -27,13 +28,17 @@ public class test1 {
 	public String hello1() {
 		return "Hi, There";
 	}
+
 	//hae nopeus mysql-palvelimelta
+
 	@GET
 	@Path("/speed")
 	@Produces(MediaType.APPLICATION_JSON)
 	public int Speed() {
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("speedapp");
+
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("EV3");
+
 		EntityManager em = emf.createEntityManager();
 
 		// find the Speed object with id=1
@@ -45,6 +50,7 @@ public class test1 {
 		emf.close();
 					return speedint;
 		}
+
 	//hae desinval
 	@GET
 	@Path("/desinval")
