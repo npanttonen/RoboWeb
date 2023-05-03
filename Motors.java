@@ -33,10 +33,10 @@ public class Motors implements Runnable{
 	public void run() {
 		// 3 = musta
 		// 27 = valkoinen 55
-		// 7-20 = keskellä 26
+		// 7-20 = keskellÃ¤ 26
         
 
-        int desiredIntensityValue = 28;
+        int desiredIntensityValue = DEobj.getDesInVal();
         float correctionMultiplier = 3.2f;
        
         while(true) {
@@ -67,18 +67,10 @@ public class Motors implements Runnable{
              	motorB.rotate(150);
              	motorB.stop(true);
         		motorA.stop(true);
-        		Delay.msDelay(500);
-        		motorB.setSpeed(200);
-        		motorA.setSpeed(200);
-        		motorB.forward();
-              	motorA.forward();
-             	Delay.msDelay(1500);
-        		motorA.stop(true);
-        		motorB.stop(true);
-        		Delay.msDelay(200);
+
              	
                  do {
-                	motorA.setSpeed(200); //180
+                	motorA.setSpeed(DEobj.getTurn()); //180
                     motorB.setSpeed(110); //140
                 	motorA.forward();
              		motorB.forward();    

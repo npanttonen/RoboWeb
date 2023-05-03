@@ -48,6 +48,7 @@ public class ObjectDodge implements Runnable{
 	            if (turn < 2) {
 	            DEobj.setOD(2);
 	            turn += 1;
+	            Delay.msDelay(3000);
 	            }
             
 	            

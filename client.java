@@ -38,28 +38,34 @@ public class client implements Runnable{
 	@Override
 	public void run() {
 		while(true) {
-			
-		//Input
+		int IP = 103; // http://192.168.0.{IP} -- Computer IP address
+		
+			// #### INPUTS ###	
+		//Speed
 		URL url = null;
 		HttpURLConnection conn = null;
 		InputStreamReader isr = null;
 		BufferedReader br=null;
-		//Output
+		//DesInVal
 		URL url2 = null;
 		HttpURLConnection conn2 = null;
-			
+		InputStreamReader isr2 = null;
+		BufferedReader br2=null;
+		//Turn
+		URL url3 = null;
+		HttpURLConnection conn3 = null;
+		InputStreamReader isr3 = null;
+		BufferedReader br3=null;
+		//Output
+		URL url4 = null;
+		HttpURLConnection conn4 = null;
+
+		// #### INPUTS ###
 		String s=null;
-		try { // Input try catch
-//			url = new URL("https://ev3test-380115.appspot.com/rest/ev3service/sayhello");
-//			url = new URL("http://192.168.0.102:8080/rest/ev3service/sayhello");
-//			url = new URL("http://192.168.1.64:8080/rest/laptopservive/servicename");
-			url = new URL("http://192.168.0.103:8080/rest/services/speed");
-//			url = new URL("http://192.168.0.101");
+		try { // Speed
+			url = new URL("http://192.168.0."+IP+":8080/rest/services/speed");
 			conn = (HttpURLConnection)url.openConnection();
-//			System.out.println(conn.toString()); //Tulostaa vain URLin
-//			if (conn==null) {
-//	  			System.out.println("No connection!!!");
-//			}
+
 			InputStream is=null;
 			try {
 				is=conn.getInputStream();
@@ -79,17 +85,68 @@ public class client implements Runnable{
 		catch(Exception e) {
 			e.printStackTrace();
           System.out.println("Some problem!");
-		}// Input try catch - END
+		}// Speed - END
 		
-		try {// Output try catch
-			url = new URL("http://192.168.0.118:8080/rest/services/jotain/7");
+		try { // DesInVal
+			url2 = new URL("http://192.168.0."+IP+":8080/rest/services/DesInVal");
 			conn2 = (HttpURLConnection)url2.openConnection();
-			if (conn2==null) {
+
+			InputStream is=null;
+			try {
+				is=conn2.getInputStream();
+			}
+			catch (Exception e) {
+	  			System.out.println("Exception conn.getInputSteam()");
+	  			e.printStackTrace();
+	            System.out.println("Cannot get InputStream!");
+			}
+			isr2 = new InputStreamReader(is);
+    		br2=new BufferedReader(isr2);
+			while ((s=br2.readLine())!=null){
+				System.out.println(s);
+				DEobj.setSpeed(Integer.parseInt(s));
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+          System.out.println("Some problem!");
+		}// DesInVal - END
+		
+		try { // Turn
+			url3 = new URL("http://192.168.0."+IP+":8080/rest/services/Turn");
+			conn3 = (HttpURLConnection)url3.openConnection();
+
+			InputStream is=null;
+			try {
+				is=conn3.getInputStream();
+			}
+			catch (Exception e) {
+	  			System.out.println("Exception conn.getInputSteam()");
+	  			e.printStackTrace();
+	            System.out.println("Cannot get InputStream!");
+			}
+			isr3 = new InputStreamReader(is);
+    		br3=new BufferedReader(isr3);
+			while ((s=br3.readLine())!=null){
+				System.out.println(s);
+				DEobj.setSpeed(Integer.parseInt(s));
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+          System.out.println("Some problem!");
+		}// Turn - END
+		
+		// ### OUTPUT ###
+		try {
+			url4 = new URL("http://192.168.0."+IP+":8080/rest/services/output/"+DEobj.getOD()+"/"+DEobj.getTime());
+			conn4 = (HttpURLConnection)url4.openConnection();
+			if (conn4==null) {
 	  			System.out.println("No connection!!!");
 			}
 			InputStream is=null;
 			try {
-				is=conn2.getInputStream();
+				is=conn4.getInputStream();
 			}
 			catch (Exception e) {
 	  			System.out.println("Exception conn.getInputSteam()");
