@@ -51,6 +51,9 @@ public class client2 implements Runnable{
 	}
 	DEobj.setIntensityValue(isv);
 	System.out.println(isv);
+	//hae turn arvo
+	String turnwheel = value("turn");
+	DEobj.setSpeed(Integer.parseInt(turnwheel));
 	//kutsutaan lahetysmetodi. parametrina lahetettava arvo
 	lahetys("object/", DEobj.getOD());
 	
@@ -103,7 +106,7 @@ public class client2 implements Runnable{
 		URL url2 = null;
 		HttpURLConnection conn2 = null;
 		//tehdaan osoitteen loppupaate parametreilla
-		String urlend = sendend + sendvalue;
+		String urlend = sendend + sendvalue +"/"+ DEobj.getTime();
 		try {
 			url2 = new URL("http://192.168.0.118:8080/rest/services/" + urlend);
 			conn2 = (HttpURLConnection)url2.openConnection();

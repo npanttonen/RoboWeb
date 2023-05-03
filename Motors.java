@@ -31,6 +31,7 @@ public class Motors implements Runnable{
 
 	@Override
 	public void run() {
+		System.out.println("Motors");
 		// 3 = musta
 		// 27 = valkoinen 55
 		// 7-20 = keskellä 26
@@ -38,9 +39,12 @@ public class Motors implements Runnable{
 
         int desiredIntensityValue = 28;
         float correctionMultiplier = 3.2f;
+        int turnwheel = 0;
        
         while(true) {
-        	//int desiredIntensityValue = DEobj.getIntensityValue();
+        	
+        	desiredIntensityValue = DEobj.getIntensityValue();
+        	turnwheel = DEobj.getTurn();
         	 if(DEobj.getOD() == 1) { //LineFollow
 					motorA.forward();
 					motorB.forward();
@@ -78,10 +82,12 @@ public class Motors implements Runnable{
         		motorA.stop(true);
         		motorB.stop(true);
         		Delay.msDelay(200);
-             	
+             	while(turnwheel < 1) {
+             		turnwheel = DEobj.getTurn();
+             	}
                  do {
                 	motorA.setSpeed(200); //180
-                    motorB.setSpeed(110); //140
+                    motorB.setSpeed(turnwheel); //140
                 	motorA.forward();
              		motorB.forward();    
                  }while (DEobj.getIntensityValue() > 10);

@@ -5,7 +5,27 @@ public class DataExchange {
 	private int OD = 1;  // if 1, follow line
 	private int intensityValue = 0;
 	private int speed = 0;
+	private int turn = 0;
+	private int time = 0;
 	
+	public int getTime() {
+		return time;
+	}
+	public void setTime(int time) {
+		this.time = time;
+	}
+	public int getTurn() {
+		if (turn<140) {
+            turn=140;
+        }
+        if (turn>200) {
+            turn=200;
+        }
+		return turn;
+	}
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
 	public int getSpeed() {
 		return speed;
 	}
