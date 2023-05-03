@@ -56,15 +56,7 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
 }
 
-#robot {
-  display: block;
-  margin: 0 auto;
-  width: 300px;
-  height: 300px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-bottom: 50px;
-}
+
 
 input[type="submit"] {
   margin-top: 20px;
@@ -84,6 +76,8 @@ input[type="submit"] {
   font-size: 24px;
   font-weight: bold;
   margin-top: 10px;
+  margin-bottom: 20px;
+  
 }
 
 #responseView {
@@ -159,8 +153,30 @@ input[type="range"]::-moz-range-thumb {
 
 
 
-    
+   
+<head>
+	<title>Robot Speed Control</title>
 </head>
+<body>
+    <h1>Robot Speed Control</h1>
+    <div id="robot"></div>
+
+    <form action='rest/hunterservice/addspeed' method='post'>
+        <label for="speed">Speed:</label>
+        <input type="range" id="speed" name="speed" min="0" max="400" value="200">
+        <div id="speed-value"></div>
+        
+        <label for="turn">Turn:</label>
+        <input type="range" id="turn" name="turn" min="140" max="200" value="170">
+        <div id="turn-value"></div>
+        
+        <label for="DesInVal">Desired Intensity Value:</label>
+        <input type="range" id="DesInVal" name="DesInVal" min="0.0" max="8.0" value="4.0">
+        <div id="DesInVal-value"></div>
+        
+        <input type="submit" value="Send" onclick="sendData()">
+    </form>
+    <div id='inparts'></div>
 
     <script>
         // JavaScript code to display the value of the slider
@@ -182,49 +198,28 @@ input[type="range"]::-moz-range-thumb {
         DesInValInput.addEventListener("input", () => {
             DesInValValue.textContent = `Desired Intensity Value: ${DesInValInput.value}`;
         });
-   
-    function sendData(){
-        var speed = new Object(); 
+
+        function sendData(){
+            var speed = new Object(); 
             speed.speed=document.getElementById("speed").value;
             speed.desinval=document.getElementById("DesInVal").value;
             speed.turn=document.getElementById("turn").value;
         
-        var jsonSpeed = JSON.stringify(speed);
-        var xhttp = new XMLHttpRequest();
+            var jsonSpeed = JSON.stringify(speed);
+            var xhttp = new XMLHttpRequest();
 
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("responseView").innerHTML = this.responseText;
-                var returned = JSON.parse(this.responseText);
-                document.getElementById("inparts").innerHTML = "id=" + returned.id + " speed=" + returned.speed + " DesInVal=" + returned.DesInVal + " turn=" + returned.turn;
-            }
-        };
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("responseView").innerHTML = this.responseText;
+                    var returned = JSON.parse(this.responseText);
+                    document.getElementById("inparts").innerHTML = "id=" + returned.id + " speed=" + returned.speed + " DesInVal=" + returned.DesInVal + " turn=" + returned.turn;
+                }
+            };
 
-        xhttp.open("POST", "./rest/hunterservice/addspeed", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(jsonSpeed);
-    }
+            xhttp.open("POST", "./rest/hunterservice/addspeed", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(jsonSpeed);
+        }
     </script>
-<body>
-    <h1>Robot Speed Control</h1>
-    <div id="robot"></div>
-
-    <form action='rest/hunterservice/addspeed' method='post'>
-        <label for="speed">Speed:</label>
-        <input type="range" id="speed" name="speed" min="0" max="400" value="200">
-        <div id="speed-value"></div>
-        
-        <label for="turn">Turn:</label>
-        <input type="range" id="turn" name="turn" min="140" max="200" value="170">
-        <div id="turn-value"></div>
-        
-        <label for="DesInVal">Desired Intensity Value:</label>
-        <input type="range" id="DesInVal" name="DesInVal" min="0" max="8" value="4">
-        <div id="DesInVal-value"></div>
-        
-        <input type="submit" value="Send" onclick="sendData()">
-    </form>
-    <div id='inparts'></div>
-
 </body>
 </html>
