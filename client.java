@@ -38,16 +38,18 @@ public class client implements Runnable{
 	@Override
 	public void run() {
 		while(true) {
-//      System.out.println("Read some text from URL\n");
-//      System.out.println("Press any key to start");
-
-      URL url = null;
+			
+		//Input
+		URL url = null;
 		HttpURLConnection conn = null;
 		InputStreamReader isr = null;
 		BufferedReader br=null;
-
+		//Output
+		URL url2 = null;
+		HttpURLConnection conn2 = null;
+			
 		String s=null;
-		try {
+		try { // Input try catch
 //			url = new URL("https://ev3test-380115.appspot.com/rest/ev3service/sayhello");
 //			url = new URL("http://192.168.0.102:8080/rest/ev3service/sayhello");
 //			url = new URL("http://192.168.1.64:8080/rest/laptopservive/servicename");
@@ -77,7 +79,28 @@ public class client implements Runnable{
 		catch(Exception e) {
 			e.printStackTrace();
           System.out.println("Some problem!");
+		}// Input try catch - END
+		
+		try {// Output try catch
+			url = new URL("http://192.168.0.118:8080/rest/services/jotain/7");
+			conn2 = (HttpURLConnection)url2.openConnection();
+			if (conn2==null) {
+	  			System.out.println("No connection!!!");
+			}
+			InputStream is=null;
+			try {
+				is=conn2.getInputStream();
+			}
+			catch (Exception e) {
+	  			System.out.println("Exception conn.getInputSteam()");
+	  			e.printStackTrace();
+	            System.out.println("Cannot get InputStream!");
+			}
 		}
+		catch(Exception e) {
+			e.printStackTrace();
+          System.out.println("Some problem!");
+		}// Output try catch - END
 		}
 	}
 
